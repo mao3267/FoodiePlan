@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const recipeRouter = require("./routes/recipe")
 const ingredientRouter = require("./routes/ingredient")
 
@@ -17,6 +18,10 @@ app.use((req, res, next) => {
 app.use("/api/recipe", recipeRouter)
 app.use("/api/ingredient", ingredientRouter)
 
-app.listen(process.env.PORT, () => {
-    console.log('Server is running on http://localhost:' + process.env.PORT);
-});
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        app.listen(process.env.PORT, () => {
+            console.log('Server is running on http://localhost:' + process.env.PORT);
+        });
+    })
+    .catch(err => console.log(err));
