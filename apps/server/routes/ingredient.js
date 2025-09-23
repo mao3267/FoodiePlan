@@ -1,5 +1,5 @@
 const express = require('express');
-
+const ingredientModel = require('../models/ingredientModel');
 const router = express.Router();
 
 
@@ -8,7 +8,13 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    res.json({ msg: "Create a new ingredient" });
+    try {
+        const { name, quantity, unit } = req.body
+        const ingredient = ingredientModel.create({ name, quantity, unit })
+        res.status(200).json(ingredient)
+    } catch (error) {
+        res.status(400).json({ "error": error.message })
+    }
 })
 
 router.delete('/:id', (req, res) => {
