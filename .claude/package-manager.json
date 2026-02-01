@@ -1,0 +1,7 @@
+{
+    "disabledMcpServers": [
+        "vercel",
+        "railway",
+        "firecrawl"
+    ]
+}
