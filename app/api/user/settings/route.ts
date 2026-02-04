@@ -18,6 +18,8 @@ function toClientSettings(doc: {
     Dinner: string;
   };
   publicProfile: boolean;
+  encryptedGeminiKey?: string | null;
+  geminiKeyLastFour?: string | null;
 }): ClientUserSettings {
   return {
     _id: String(doc._id),
@@ -32,6 +34,10 @@ function toClientSettings(doc: {
       Dinner: doc.defaultMealTimes.Dinner,
     },
     publicProfile: doc.publicProfile,
+    hasGeminiKey: !!doc.encryptedGeminiKey,
+    maskedGeminiKey: doc.geminiKeyLastFour
+      ? `****${doc.geminiKeyLastFour}`
+      : null,
   };
 }
 

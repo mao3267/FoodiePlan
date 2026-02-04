@@ -29,5 +29,10 @@ export const updateSettingsSchema = z.object({
   publicProfile: z.boolean().optional(),
 });
 
+export const saveApiKeySchema = z.object({
+  apiKey: z.string().min(10, "API key is too short").max(256, "API key is too long"),
+});
+
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 export type UpdateSettingsInput = z.infer<typeof updateSettingsSchema>;
+export type SaveApiKeyInput = z.infer<typeof saveApiKeySchema>;

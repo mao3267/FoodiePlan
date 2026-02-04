@@ -20,6 +20,8 @@ export interface IUserSettings {
   notifications: INotificationPreferences;
   defaultMealTimes: IDefaultMealTimes;
   publicProfile: boolean;
+  encryptedGeminiKey?: string | null;
+  geminiKeyLastFour?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -29,6 +31,8 @@ export interface ClientUserSettings {
   notifications: INotificationPreferences;
   defaultMealTimes: IDefaultMealTimes;
   publicProfile: boolean;
+  hasGeminiKey: boolean;
+  maskedGeminiKey: string | null;
 }
 
 export interface IUser {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { generateMealPlan } from "@/lib/gemini/client";
+import { getUserGeminiApiKey } from "@/lib/gemini/get-user-api-key";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -8,13 +9,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { days, preferences, servings } = body;
+  try {
+    const body = await request.json();
+    const { days, preferences, servings } = body;
 
-  const plan = await generateMealPlan({
-    days: days || 7,
-    preferences: preferences || {},
-    servings: servings || 2,
-  });
-  return NextResponse.json({ plan });
+    const userApiKey = await getUserGeminiApiKey(session.user.id);
+    const plan = await generateMealPlan(
+      {
+        days: days || 7,
+        preferences: preferences || {},
+        servings: servings || 2,
+      },
+      userApiKey
+    );
+    return NextResponse.json({ plan });
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to generate meal plan" },
+      { status: 500 }
+    );
+  }
 }

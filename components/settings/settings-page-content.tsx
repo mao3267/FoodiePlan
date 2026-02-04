@@ -8,6 +8,7 @@ import { ProfileSection } from "@/components/settings/profile-section";
 import { AuthenticationSection } from "@/components/settings/authentication-section";
 import { AppearanceSection } from "@/components/settings/appearance-section";
 import { NotificationsSection } from "@/components/settings/notifications-section";
+import { AIConfigSection } from "@/components/settings/ai-config-section";
 import { PrivacySection } from "@/components/settings/privacy-section";
 import { DangerZoneSection } from "@/components/settings/danger-zone-section";
 import type {
@@ -120,6 +121,16 @@ export function SettingsPageContent() {
           }
           onMealTimesChange={(defaultMealTimes) =>
             saveSettings({ defaultMealTimes })
+          }
+        />
+
+        <AIConfigSection
+          hasGeminiKey={settings.hasGeminiKey}
+          maskedGeminiKey={settings.maskedGeminiKey}
+          onKeyChanged={(hasGeminiKey, maskedGeminiKey) =>
+            setSettings((prev) =>
+              prev ? { ...prev, hasGeminiKey, maskedGeminiKey } : null
+            )
           }
         />
 

@@ -1,10 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { recipeSuggestionPrompt, mealPlanPrompt } from "./prompts";
 
-function getClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
+function getClient(userApiKey?: string | null) {
+  const apiKey = userApiKey || process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY environment variable is not set");
+    throw new Error(
+      "No Gemini API key available. Set GEMINI_API_KEY or configure a key in Settings."
+    );
   }
   return new GoogleGenerativeAI(apiKey);
 }
@@ -17,9 +19,10 @@ function parseJsonResponse(text: string): unknown {
 
 export async function suggestRecipes(
   ingredients: string[],
-  preferences?: string
+  preferences?: string,
+  apiKey?: string | null
 ) {
-  const genAI = getClient();
+  const genAI = getClient(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const prompt = recipeSuggestionPrompt(ingredients, preferences);
@@ -29,12 +32,15 @@ export async function suggestRecipes(
   return parseJsonResponse(text);
 }
 
-export async function generateMealPlan(options: {
-  days: number;
-  preferences: Record<string, string>;
-  servings: number;
-}) {
-  const genAI = getClient();
+export async function generateMealPlan(
+  options: {
+    days: number;
+    preferences: Record<string, string>;
+    servings: number;
+  },
+  apiKey?: string | null
+) {
+  const genAI = getClient(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const prompt = mealPlanPrompt(options);

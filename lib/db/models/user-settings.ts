@@ -40,6 +40,8 @@ const userSettingsSchema = new Schema<IUserSettings>(
       default: () => ({}),
     },
     publicProfile: { type: Boolean, default: true },
+    encryptedGeminiKey: { type: String, default: null },
+    geminiKeyLastFour: { type: String, default: null },
   },
   { timestamps: true }
 );
