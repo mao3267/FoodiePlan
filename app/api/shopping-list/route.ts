@@ -9,7 +9,7 @@ import {
   consolidateIngredients,
   buildPlanKey,
 } from "@/lib/utils/consolidate-ingredients";
-import { getWeekStart } from "@/lib/utils/week-dates";
+import { getWeekStart, getTodayDayIndex, getWeekDays } from "@/lib/utils/week-dates";
 import type { ClientMealPlan } from "@/lib/types";
 
 const weeksSchema = z.enum(["this", "next", "both"]).default("this");
@@ -60,12 +60,26 @@ export async function GET(request: NextRequest) {
       for (const day of serialized.days ?? []) {
         for (const meal of day.meals ?? []) {
           meal.ingredients = normalizeIngredients(meal.ingredients ?? []);
+          meal.seasonings = normalizeIngredients(meal.seasonings ?? []);
         }
       }
       return serialized;
     });
 
-    const consolidated = consolidateIngredients(serializedPlans);
+    const thisWeekStart = getWeekStart(0).getTime();
+    const todayIndex = getTodayDayIndex();
+    const allDays = getWeekDays();
+
+    const filteredPlans = serializedPlans.map((plan) => {
+      const isThisWeek = new Date(plan.weekStart).getTime() === thisWeekStart;
+      if (!isThisWeek) return plan;
+      return {
+        ...plan,
+        days: plan.days.filter((d) => allDays.indexOf(d.day) >= todayIndex),
+      };
+    });
+
+    const consolidated = consolidateIngredients(filteredPlans);
 
     let shoppingList = await ShoppingList.findOne({
       userId: session.user.id,
@@ -85,8 +99,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const newPlanKeys = new Set(consolidated.map((c) => c.planKey));
-
     const updatedPlanItems = consolidated.map((c) => {
       const existing = existingPlanItems.get(c.planKey);
       return {
@@ -96,6 +108,7 @@ export async function GET(request: NextRequest) {
         source: "plan" as const,
         checked: existing?.checked ?? false,
         planKey: c.planKey,
+        category: c.category,
       };
     });
 
@@ -103,17 +116,6 @@ export async function GET(request: NextRequest) {
       ...updatedPlanItems,
       ...shoppingList.items.filter((item) => item.source === "manual"),
     ];
-
-    const stalePlanKeys = Array.from(existingPlanItems.keys()).filter(
-      (key) => !newPlanKeys.has(key)
-    );
-    if (stalePlanKeys.length > 0) {
-      shoppingList.items = shoppingList.items.filter(
-        (item) =>
-          item.source !== "plan" ||
-          !stalePlanKeys.includes(item.planKey ?? "")
-      );
-    }
 
     await shoppingList.save();
 
@@ -162,6 +164,7 @@ export async function POST(request: Request) {
       source: "manual" as const,
       checked: false,
       planKey: buildPlanKey(parsed.data.name, parsed.data.unit),
+      category: "food" as const,
     };
 
     shoppingList.items.push(newItem);

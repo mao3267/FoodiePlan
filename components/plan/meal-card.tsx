@@ -28,10 +28,18 @@ export function MealCard({
   const [expanded, setExpanded] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const visibleIngredients = expanded
-    ? meal.ingredients
-    : meal.ingredients.slice(0, INITIAL_INGREDIENT_COUNT);
-  const hiddenCount = meal.ingredients.length - INITIAL_INGREDIENT_COUNT;
+  const ingredients = meal.ingredients;
+  const seasonings = meal.seasonings ?? [];
+  const totalItems = ingredients.length + seasonings.length;
+  const hiddenCount = totalItems - INITIAL_INGREDIENT_COUNT;
+
+  const ingredientsToShow = expanded
+    ? ingredients
+    : ingredients.slice(0, INITIAL_INGREDIENT_COUNT);
+  const seasoningSlots = expanded
+    ? seasonings.length
+    : Math.max(0, INITIAL_INGREDIENT_COUNT - ingredients.length);
+  const seasoningsToShow = seasonings.slice(0, seasoningSlots);
 
   async function handleDelete() {
     setDeleting(true);
@@ -90,14 +98,28 @@ export function MealCard({
         </div>
       </div>
 
-      {meal.ingredients.length > 0 && (
+      {totalItems > 0 && (
         <div className="text-sm">
-          <p className="font-medium mb-1 text-card-foreground">Ingredients:</p>
-          <ul className="space-y-0.5 text-muted-foreground">
-            {visibleIngredients.map((ingredient, idx) => (
-              <li key={idx}>&#8226; {formatIngredient(ingredient)}</li>
-            ))}
-          </ul>
+          {ingredientsToShow.length > 0 && (
+            <>
+              <p className="font-medium mb-1 text-card-foreground">Ingredients:</p>
+              <ul className="space-y-0.5 text-muted-foreground">
+                {ingredientsToShow.map((ingredient, idx) => (
+                  <li key={`ing-${idx}`}>&#8226; {formatIngredient(ingredient)}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {seasoningsToShow.length > 0 && (
+            <>
+              <p className="font-medium mb-1 mt-2 text-card-foreground">Seasonings:</p>
+              <ul className="space-y-0.5 text-muted-foreground">
+                {seasoningsToShow.map((seasoning, idx) => (
+                  <li key={`sea-${idx}`}>&#8226; {seasoning.name}</li>
+                ))}
+              </ul>
+            </>
+          )}
           {hiddenCount > 0 && !expanded && (
             <button
               onClick={() => setExpanded(true)}

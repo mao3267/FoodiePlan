@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/auth";
 import { connectDB } from "@/lib/db/connection";
 import { MealPlan } from "@/lib/db/models/meal-plan";
-import { getWeekStart, getWeekDays, formatWeekStart } from "@/lib/utils/week-dates";
+import { getWeekStart, getWeekDays, formatWeekStart, getTodayDayIndex, getWeekLabel } from "@/lib/utils/week-dates";
 import { PlanPageContent } from "@/components/plan/plan-page-content";
 import type { ClientMealPlan, ClientDayPlan } from "@/lib/types";
 
@@ -41,6 +41,13 @@ export default async function PlanPage() {
     MealPlan.findOne({ userId: session.user.id, weekStart: nextWeekDate }),
   ]);
 
+  MealPlan.deleteMany({
+    userId: session.user.id,
+    weekStart: { $lt: thisWeekDate },
+  }).catch((error) => {
+    console.error("Failed to clean up old meal plans:", error);
+  });
+
   const emptyDays: ClientDayPlan[] = getWeekDays().map((day) => ({
     day,
     meals: [],
@@ -54,7 +61,11 @@ export default async function PlanPage() {
     ? JSON.parse(JSON.stringify(nextWeekDoc))
     : { _id: null, weekStart: nextWeekDate.toISOString(), days: emptyDays };
 
-  const thisWeekPlan = buildFullWeek(thisWeekRaw);
+  const thisWeekFull = buildFullWeek(thisWeekRaw);
+  const thisWeekPlan = {
+    ...thisWeekFull,
+    days: thisWeekFull.days.slice(getTodayDayIndex()),
+  };
   const nextWeekPlan = buildFullWeek(nextWeekRaw);
 
   return (
@@ -64,6 +75,8 @@ export default async function PlanPage() {
         nextWeekPlan={nextWeekPlan}
         thisWeekStart={formatWeekStart(thisWeekDate)}
         nextWeekStart={formatWeekStart(nextWeekDate)}
+        thisWeekLabel={getWeekLabel(thisWeekDate)}
+        nextWeekLabel={getWeekLabel(nextWeekDate)}
       />
     </Suspense>
   );
