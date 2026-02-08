@@ -77,14 +77,11 @@ describe("getUserGeminiApiKey", () => {
     expect(result).toBe(apiKey);
   });
 
-  it("should return null and log error when decryption fails", async () => {
+  it("should return null silently when decryption fails", async () => {
     const { getUserGeminiApiKey } = await import(
       "@/lib/gemini/get-user-api-key"
     );
     const userId = new mongoose.Types.ObjectId();
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
 
     await UserSettings.create({
       userId,
@@ -94,11 +91,6 @@ describe("getUserGeminiApiKey", () => {
 
     const result = await getUserGeminiApiKey(userId.toString());
     expect(result).toBeNull();
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to decrypt user API key for userId:",
-      userId.toString(),
-      expect.any(Error)
-    );
   });
 
   it("should return null when encryptedGeminiKey is explicitly null", async () => {

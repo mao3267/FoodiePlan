@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import { motion } from "motion/react";
 import { Home, Calendar, ShoppingCart, Settings, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -40,14 +41,25 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                     isActive
-                      ? "bg-primary/10 text-primary"
+                      ? "text-primary"
                       : "text-muted-foreground hover:bg-accent"
                   }`}
                 >
-                  <Icon className="size-5" />
-                  <span>{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-active-indicator"
+                      className="absolute inset-0 rounded-lg bg-primary/10"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 35,
+                      }}
+                    />
+                  )}
+                  <Icon className="relative size-5" />
+                  <span className="relative">{item.label}</span>
                 </Link>
               );
             })}

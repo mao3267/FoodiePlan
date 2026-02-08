@@ -40,10 +40,10 @@ export function AuthenticationSection() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => signOut({ callbackUrl: "/" })}
         >
           <LogOut className="size-4 mr-2" />
-          Disconnect
+          Log Out
         </Button>
       </div>
     </Card>

@@ -16,6 +16,11 @@ const VALID_DAYS = [
   "Sunday",
 ] as const;
 
+function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
 const ingredientSchema = z.object({
   name: z.string().trim().min(1).max(200),
   quantity: z.number().min(0).default(1),
@@ -27,6 +32,7 @@ const mealBodySchema = z.object({
   time: z.enum(["Breakfast", "Lunch", "Dinner", "Snack"]),
   servings: z.number().int().min(1).max(100),
   ingredients: z.array(ingredientSchema).max(50).default([]),
+  seasonings: z.array(ingredientSchema).max(50).default([]),
 });
 
 const postBodySchema = z.object({
@@ -40,6 +46,7 @@ function normalizePlanResponse(plan: unknown): unknown {
   for (const day of serialized.days ?? []) {
     for (const meal of day.meals ?? []) {
       meal.ingredients = normalizeIngredients(meal.ingredients ?? []);
+      meal.seasonings = normalizeIngredients(meal.seasonings ?? []);
     }
   }
   return serialized;
@@ -57,7 +64,7 @@ export async function GET(request: NextRequest) {
     const weekStartParam = request.nextUrl.searchParams.get("weekStart");
 
     if (weekStartParam) {
-      const weekStart = new Date(weekStartParam);
+      const weekStart = parseLocalDate(weekStartParam);
       if (isNaN(weekStart.getTime())) {
         return NextResponse.json(
           { error: "Invalid weekStart date" },
@@ -110,7 +117,7 @@ export async function POST(request: Request) {
     }
 
     const { weekStart, day, meal } = parsed.data;
-    const weekDate = new Date(weekStart);
+    const weekDate = parseLocalDate(weekStart);
     if (isNaN(weekDate.getTime())) {
       return NextResponse.json(
         { error: "Invalid weekStart date" },

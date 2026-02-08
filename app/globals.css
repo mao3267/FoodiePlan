@@ -124,6 +124,27 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@keyframes float-diagonal {
+  0% {
+    transform: translate(50vw, -20vh) rotate(12deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50vw, 120vh) rotate(-12deg);
+    opacity: 0;
+  }
+}
+
+.animate-float-diagonal {
+  animation: float-diagonal 20s linear infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

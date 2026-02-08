@@ -17,8 +17,7 @@ export async function getUserGeminiApiKey(
 
   try {
     return decrypt(settings.encryptedGeminiKey);
-  } catch (error) {
-    console.error("Failed to decrypt user API key for userId:", userId, error);
+  } catch {
     return null;
   }
 }

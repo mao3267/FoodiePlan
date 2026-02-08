@@ -6,7 +6,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MealCard } from "@/components/plan/meal-card";
 import { AddMealDialog } from "@/components/plan/add-meal-dialog";
-import type { ClientDayPlan, ClientMeal } from "@/lib/types";
+import type { ClientDayPlan, ClientMeal, MealTime } from "@/lib/types";
+
+const MEAL_TIME_ORDER: Record<MealTime, number> = {
+  Breakfast: 0,
+  Lunch: 1,
+  Dinner: 2,
+  Snack: 3,
+};
 
 interface DayCardProps {
   dayPlan: ClientDayPlan;
@@ -55,7 +62,7 @@ export function DayCard({
           </p>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {dayPlan.meals.map((meal) => (
+            {[...dayPlan.meals].sort((a, b) => MEAL_TIME_ORDER[a.time] - MEAL_TIME_ORDER[b.time]).map((meal) => (
               <MealCard
                 key={meal._id}
                 meal={meal}

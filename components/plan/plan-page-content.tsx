@@ -16,6 +16,8 @@ interface PlanPageContentProps {
   nextWeekPlan: ClientMealPlan;
   thisWeekStart: string;
   nextWeekStart: string;
+  thisWeekLabel: string;
+  nextWeekLabel: string;
 }
 
 export function PlanPageContent({
@@ -23,6 +25,8 @@ export function PlanPageContent({
   nextWeekPlan,
   thisWeekStart,
   nextWeekStart,
+  thisWeekLabel,
+  nextWeekLabel,
 }: PlanPageContentProps) {
   const router = useRouter();
   const [activeWeek, setActiveWeek] = useState("this-week");
@@ -39,8 +43,8 @@ export function PlanPageContent({
 
       <Tabs value={activeWeek} onValueChange={setActiveWeek} className="w-full">
         <TabsList className="grid w-full max-w-md mb-6 grid-cols-2">
-          <TabsTrigger value="this-week">This Week</TabsTrigger>
-          <TabsTrigger value="next-week">Next Week</TabsTrigger>
+          <TabsTrigger value="this-week">This Week ({thisWeekLabel})</TabsTrigger>
+          <TabsTrigger value="next-week">Next Week ({nextWeekLabel})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="this-week" className="space-y-4">

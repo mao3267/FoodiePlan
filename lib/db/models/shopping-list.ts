@@ -13,6 +13,11 @@ const shoppingListItemSchema = new Schema<IShoppingListItem>({
   },
   checked: { type: Boolean, default: false },
   planKey: { type: String },
+  category: {
+    type: String,
+    enum: ["food", "seasoning"],
+    default: "food",
+  },
 });
 
 const shoppingListSchema = new Schema<IShoppingList>(

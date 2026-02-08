@@ -5,6 +5,7 @@ export interface ConsolidatedIngredient {
   quantity: number;
   unit: string;
   planKey: string;
+  category: "food" | "seasoning";
 }
 
 export function buildPlanKey(name: string, unit: string): string {
@@ -20,7 +21,10 @@ export function consolidateIngredients(
     for (const day of plan.days) {
       for (const meal of day.meals) {
         for (const ing of meal.ingredients) {
-          addIngredient(map, ing);
+          addIngredient(map, ing, "food");
+        }
+        for (const ing of meal.seasonings ?? []) {
+          addIngredient(map, ing, "seasoning");
         }
       }
     }
@@ -33,7 +37,8 @@ export function consolidateIngredients(
 
 function addIngredient(
   map: Map<string, ConsolidatedIngredient>,
-  ing: ClientMealIngredient
+  ing: ClientMealIngredient,
+  category: "food" | "seasoning"
 ): void {
   const key = buildPlanKey(ing.name, ing.unit);
   const quantity = Number(ing.quantity) || 0;
@@ -50,6 +55,7 @@ function addIngredient(
       quantity,
       unit: ing.unit.trim(),
       planKey: key,
+      category,
     });
   }
 }

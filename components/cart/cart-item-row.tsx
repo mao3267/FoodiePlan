@@ -10,6 +10,7 @@ interface CartItemRowProps {
   onToggleChecked: (itemId: string, checked: boolean) => void;
   onEdit: (item: ClientShoppingItem) => void;
   onDelete: (itemId: string) => void;
+  hideMeasurement?: boolean;
 }
 
 function formatQuantity(quantity: number, unit: string): string {
@@ -24,8 +25,11 @@ export function CartItemRow({
   onToggleChecked,
   onEdit,
   onDelete,
+  hideMeasurement = false,
 }: CartItemRowProps) {
-  const quantityDisplay = formatQuantity(item.quantity, item.unit);
+  const quantityDisplay = hideMeasurement
+    ? ""
+    : formatQuantity(item.quantity, item.unit);
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">

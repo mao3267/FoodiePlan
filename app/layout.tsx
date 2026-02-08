@@ -5,6 +5,8 @@ import { ThemeProvider } from "next-themes";
 import { auth } from "@/lib/auth/auth";
 import { Navigation } from "@/components/navigation";
 import { Toaster } from "@/components/ui/sonner";
+import { ChatBubble } from "@/components/chat/chat-bubble";
+import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,10 +29,13 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <div className="min-h-screen bg-background">
-              <Navigation />
-              <main>{children}</main>
+              {session?.user && <Navigation />}
+              <main>
+                <PageTransition>{children}</PageTransition>
+              </main>
             </div>
             <Toaster />
+            {session?.user && <ChatBubble />}
           </ThemeProvider>
         </SessionProvider>
       </body>

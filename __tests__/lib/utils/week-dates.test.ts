@@ -1,21 +1,22 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   getWeekStart,
   getWeekDays,
   formatWeekStart,
   getWeekLabel,
+  getTodayDayIndex,
 } from "@/lib/utils/week-dates";
 
 describe("week-dates utility", () => {
   describe("getWeekStart", () => {
     it("returns a Monday for current week (offset=0)", () => {
       const monday = getWeekStart(0);
-      expect(monday.getUTCDay()).toBe(1);
+      expect(monday.getDay()).toBe(1);
     });
 
     it("returns a Monday for next week (offset=1)", () => {
       const nextMonday = getWeekStart(1);
-      expect(nextMonday.getUTCDay()).toBe(1);
+      expect(nextMonday.getDay()).toBe(1);
     });
 
     it("next week start is 7 days after this week start", () => {
@@ -26,12 +27,12 @@ describe("week-dates utility", () => {
       expect(diffDays).toBe(7);
     });
 
-    it("returns UTC midnight", () => {
+    it("returns local midnight", () => {
       const monday = getWeekStart(0);
-      expect(monday.getUTCHours()).toBe(0);
-      expect(monday.getUTCMinutes()).toBe(0);
-      expect(monday.getUTCSeconds()).toBe(0);
-      expect(monday.getUTCMilliseconds()).toBe(0);
+      expect(monday.getHours()).toBe(0);
+      expect(monday.getMinutes()).toBe(0);
+      expect(monday.getSeconds()).toBe(0);
+      expect(monday.getMilliseconds()).toBe(0);
     });
   });
 
@@ -62,15 +63,44 @@ describe("week-dates utility", () => {
   });
 
   describe("formatWeekStart", () => {
-    it("formats a date as YYYY-MM-DD", () => {
-      const date = new Date(Date.UTC(2025, 0, 27));
+    it("formats a date as YYYY-MM-DD using local date parts", () => {
+      const date = new Date(2025, 0, 27);
       expect(formatWeekStart(date)).toBe("2025-01-27");
+    });
+  });
+
+  describe("getTodayDayIndex", () => {
+    it("returns 0 for Monday", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(2025, 0, 27)); // Monday
+      expect(getTodayDayIndex()).toBe(0);
+      vi.useRealTimers();
+    });
+
+    it("returns 4 for Friday", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(2025, 0, 31)); // Friday
+      expect(getTodayDayIndex()).toBe(4);
+      vi.useRealTimers();
+    });
+
+    it("returns 6 for Sunday", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(2025, 1, 2)); // Sunday
+      expect(getTodayDayIndex()).toBe(6);
+      vi.useRealTimers();
+    });
+
+    it("returns a value between 0 and 6", () => {
+      const index = getTodayDayIndex();
+      expect(index).toBeGreaterThanOrEqual(0);
+      expect(index).toBeLessThanOrEqual(6);
     });
   });
 
   describe("getWeekLabel", () => {
     it("returns a range label for a week start date", () => {
-      const date = new Date(Date.UTC(2025, 0, 27));
+      const date = new Date(2025, 0, 27);
       const label = getWeekLabel(date);
       expect(label).toContain("Jan 27");
       expect(label).toContain("Feb 2");

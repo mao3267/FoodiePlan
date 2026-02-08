@@ -168,7 +168,7 @@ export function AIConfigSection({
                   <AlertDialogTitle>Remove API key?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This will delete your stored Gemini API key. AI features will
-                    fall back to the server default key if one is configured.
+                    be unavailable until you add a new key.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

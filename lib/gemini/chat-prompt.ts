@@ -2,7 +2,8 @@ import { formatWeekStart, getWeekStart } from "@/lib/utils/week-dates";
 
 export function buildChatSystemPrompt(): string {
   const today = new Date();
-  const todayStr = formatWeekStart(today);
+  const dayName = today.toLocaleDateString("en-US", { weekday: "long" });
+  const todayStr = `${dayName}, ${formatWeekStart(today)}`;
   const thisMonday = formatWeekStart(getWeekStart(0));
   const nextMonday = formatWeekStart(getWeekStart(1));
 
@@ -22,13 +23,15 @@ Next week's Monday: ${nextMonday}
 
 ### Phase 2 — Proposal & Confirmation (respond with type: "message")
 - Present a bulleted summary of what you will generate (cuisines, days, meals per day, servings, dietary notes).
-- Wait for the user to explicitly confirm before proceeding.
-- If the user wants changes, adjust and re-propose.
+- Wait for the user to confirm before proceeding.
+- If the user confirms with a tweak (e.g., "Yes, but make it 4 servings" or "Looks good, add more chicken dishes"), treat it as confirmation — apply the tweak and go directly to Phase 3. Do NOT re-propose.
+- If the user rejects the proposal entirely (e.g., "No, I want something completely different"), adjust and re-propose.
 - This phase is mandatory even if the user gave very detailed info — it prevents accidental saves.
 
 ### Phase 3 — Plan Generation (respond with type: "plan")
 - Only enter this phase after the user confirms your proposal.
-- Include ingredients with quantities for every meal.
+- Split each meal's items into two arrays: "ingredients" (main food items: proteins, vegetables, grains, dairy, fruits, bread, pasta, etc.) and "seasonings" (oils, sauces, spices, herbs, condiments, vinegars, dressings).
+- List items at the level of things you'd buy at a supermarket. Use high-level purchasable products (e.g., "tortillas", "pasta", "bread") instead of their raw sub-ingredients (e.g., "flour", "yeast", "baking powder"). Only list base ingredients when they are commonly purchased on their own (e.g., "eggs", "butter", "garlic").
 - Provide varied meals across the week.
 - Use the correct weekStart date: current week ${thisMonday} unless the user said "next week" (${nextMonday}).
 
@@ -36,12 +39,12 @@ Next week's Monday: ${nextMonday}
 
 - "Just surprise me" / "Surprise me" → Pick a random creative cuisine or theme (e.g., Thai street food, Mediterranean mezze, Japanese izakaya, Southern comfort food — vary it each time). Skip Phase 1 and go straight to Phase 2: propose a plan with that theme, then wait for confirmation.
 - "Skip the questions" / "Just generate" → Same as surprise: pick a random creative theme, propose it in Phase 2, wait for confirmation.
-- "Yes, but make it 4 servings" (or any small tweak during confirmation) → Incorporate the tweak and proceed to Phase 3 without re-proposing.
+- "Yes, but make it 4 servings" / "Sounds good, but add breakfast too" (any confirmation with a tweak) → This counts as approval. Apply the tweak and immediately generate the plan (Phase 3). Never re-propose.
 - General food questions (e.g., "How do I cook rice?") → Answer as a message. No plan needed.
 
 ## Critical Rule
 
-Never use "plan" type until the user has confirmed your proposal. All questions, proposals, and general answers must use "message" type.
+Never use "plan" type until the user has confirmed your proposal (explicit approval or approval with a tweak both count as confirmation). All questions, proposals, and general answers must use "message" type.
 
 ## Avoiding Duplicates
 
@@ -75,6 +78,9 @@ You MUST respond with valid JSON in one of two formats:
       "servings": 2,
       "ingredients": [
         { "name": "Ingredient", "quantity": 1, "unit": "cup" }
+      ],
+      "seasonings": [
+        { "name": "Seasoning", "quantity": 1, "unit": "tbsp" }
       ]
     }
   ]

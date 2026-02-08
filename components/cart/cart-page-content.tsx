@@ -107,10 +107,19 @@ export function CartPageContent() {
   const checkedCount = items.filter((i) => i.checked).length;
   const totalCount = items.length;
 
-  const sortedItems = [...items].sort((a, b) => {
+  const sortByCheckedThenName = (a: ClientShoppingItem, b: ClientShoppingItem) => {
     if (a.checked !== b.checked) return a.checked ? 1 : -1;
     return a.name.localeCompare(b.name);
-  });
+  };
+
+  const foodItems = items
+    .filter((i) => i.category !== "seasoning")
+    .sort(sortByCheckedThenName);
+  const seasoningItems = items
+    .filter((i) => i.category === "seasoning")
+    .sort(sortByCheckedThenName);
+
+  const hasItems = items.length > 0;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -144,20 +153,46 @@ export function CartPageContent() {
             ))}
           </div>
         </Card>
-      ) : sortedItems.length > 0 ? (
-        <Card className="p-4">
-          <div className="divide-y divide-border">
-            {sortedItems.map((item) => (
-              <CartItemRow
-                key={item._id}
-                item={item}
-                onToggleChecked={handleToggleChecked}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteItem}
-              />
-            ))}
-          </div>
-        </Card>
+      ) : hasItems ? (
+        <div className="space-y-6">
+          {foodItems.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold mb-3">Food</h2>
+              <Card className="p-4">
+                <div className="divide-y divide-border">
+                  {foodItems.map((item) => (
+                    <CartItemRow
+                      key={item._id}
+                      item={item}
+                      onToggleChecked={handleToggleChecked}
+                      onEdit={handleEditClick}
+                      onDelete={handleDeleteItem}
+                    />
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+          {seasoningItems.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold mb-3">Seasonings</h2>
+              <Card className="p-4">
+                <div className="divide-y divide-border">
+                  {seasoningItems.map((item) => (
+                    <CartItemRow
+                      key={item._id}
+                      item={item}
+                      onToggleChecked={handleToggleChecked}
+                      onEdit={handleEditClick}
+                      onDelete={handleDeleteItem}
+                      hideMeasurement
+                    />
+                  ))}
+                </div>
+              </Card>
+            </div>
+          )}
+        </div>
       ) : (
         <Card className="p-12 text-center">
           <ShoppingCart className="size-16 mx-auto mb-4 text-muted-foreground/30" />

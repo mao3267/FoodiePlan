@@ -81,7 +81,6 @@ MONGODB_URI=              # MongoDB connection string
 AUTH_SECRET=              # Auth.js secret (generate: openssl rand -base64 32)
 AUTH_GOOGLE_ID=           # Google OAuth client ID
 AUTH_GOOGLE_SECRET=       # Google OAuth client secret
-GEMINI_API_KEY=           # Google Gemini API key
 ENCRYPTION_KEY=           # 64-char hex string for API key encryption (generate: openssl rand -hex 32)
 NEXT_PUBLIC_APP_URL=      # App URL (http://localhost:3000 in dev)
 ```

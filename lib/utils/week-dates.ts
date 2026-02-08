@@ -11,14 +11,14 @@ const WEEK_DAYS = [
 ] as const;
 
 /**
- * Returns the Monday 00:00:00 UTC for the current week (offset=0)
+ * Returns the Monday 00:00:00 local time for the current week (offset=0)
  * or a future week (offset=1 for next week, etc.).
  */
 export function getWeekStart(offset: number = 0): Date {
   const now = new Date();
   const monday = startOfWeek(now, { weekStartsOn: 1 });
   const target = offset === 0 ? monday : addWeeks(monday, offset);
-  target.setUTCHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
   return target;
 }
 
@@ -30,18 +30,26 @@ export function getWeekDays(): readonly string[] {
 }
 
 /**
- * Formats a Date as an ISO date string (YYYY-MM-DD) for API usage.
- * Uses toISOString() to ensure UTC-based formatting.
+ * Formats a Date as a YYYY-MM-DD string using local date parts.
  */
 export function formatWeekStart(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 const MS_PER_DAY = 86_400_000;
 
 /**
+ * Returns the 0-based index of today in the WEEK_DAYS array (Monday=0, Sunday=6).
+ */
+export function getTodayDayIndex(): number {
+  return (new Date().getDay() + 6) % 7;
+}
+
+/**
  * Returns a human-readable label for a week start date.
- * Uses Intl.DateTimeFormat with UTC timezone for consistent formatting.
  * Example: "Jan 27 – Feb 2"
  */
 export function getWeekLabel(weekStart: Date): string {
@@ -49,7 +57,6 @@ export function getWeekLabel(weekStart: Date): string {
   const fmt = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
-    timeZone: "UTC",
   });
   return `${fmt.format(weekStart)} – ${fmt.format(weekEnd)}`;
 }

@@ -20,6 +20,7 @@ const mealSchema = new Schema<IMealPlanMeal>({
   },
   servings: { type: Number, required: true, default: 1 },
   ingredients: [mealIngredientSchema],
+  seasonings: { type: [mealIngredientSchema], default: [] },
 });
 
 const dayPlanSchema = new Schema<IMealPlanDay>(

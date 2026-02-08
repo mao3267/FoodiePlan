@@ -84,6 +84,7 @@ export interface IMealPlanMeal {
   time: "Breakfast" | "Lunch" | "Dinner" | "Snack";
   servings: number;
   ingredients: IMealIngredient[];
+  seasonings: IMealIngredient[];
 }
 
 export interface IMealPlanDay {
@@ -115,6 +116,7 @@ export interface ClientMeal {
   time: MealTime;
   servings: number;
   ingredients: ClientMealIngredient[];
+  seasonings: ClientMealIngredient[];
 }
 
 export interface ClientDayPlan {
@@ -136,6 +138,7 @@ export interface IShoppingListItem {
   source: "plan" | "manual";
   checked: boolean;
   planKey?: string;
+  category: "food" | "seasoning";
 }
 
 export interface IShoppingList {
@@ -153,4 +156,22 @@ export interface ClientShoppingItem {
   unit: string;
   source: "plan" | "manual";
   checked: boolean;
+  category: "food" | "seasoning";
+}
+
+export interface IPost {
+  _id: Types.ObjectId;
+  userId: Types.ObjectId;
+  content: string;
+  image: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ClientPost {
+  _id: string;
+  content: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -48,6 +48,6 @@ describe("Navigation", () => {
     render(<Navigation />);
 
     const homeLink = screen.getByText("Home").closest("a");
-    expect(homeLink?.className).toContain("bg-primary/10");
+    expect(homeLink?.className).toContain("text-primary");
   });
 });

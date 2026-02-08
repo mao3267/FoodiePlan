@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { generateMealPlan } from "@/lib/gemini/client";
 import { getUserGeminiApiKey } from "@/lib/gemini/get-user-api-key";
+import { getGeminiErrorMessage, getGeminiErrorStatus } from "@/lib/gemini/error";
+import { generatePlanSchema } from "@/lib/validations/ai";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -11,22 +13,34 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { days, preferences, servings } = body;
+    const parsed = generatePlanSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+        { status: 400 }
+      );
+    }
 
     const userApiKey = await getUserGeminiApiKey(session.user.id);
+    if (!userApiKey) {
+      return NextResponse.json(
+        { error: "No Gemini API key configured. Please add your API key in Settings." },
+        { status: 400 }
+      );
+    }
     const plan = await generateMealPlan(
       {
-        days: days || 7,
-        preferences: preferences || {},
-        servings: servings || 2,
+        days: parsed.data.days,
+        preferences: parsed.data.preferences,
+        servings: parsed.data.servings,
       },
       userApiKey
     );
     return NextResponse.json({ plan });
-  } catch {
+  } catch (error) {
     return NextResponse.json(
-      { error: "Failed to generate meal plan" },
-      { status: 500 }
+      { error: getGeminiErrorMessage(error, "Failed to generate meal plan") },
+      { status: getGeminiErrorStatus(error) }
     );
   }
 }

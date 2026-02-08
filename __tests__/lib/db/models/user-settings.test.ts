@@ -8,6 +8,7 @@ let mongoServer: MongoMemoryServer;
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
   await mongoose.connect(mongoServer.getUri());
+  await UserSettings.syncIndexes();
 });
 
 afterEach(async () => {
