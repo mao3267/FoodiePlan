@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { AnimatePresence } from "motion/react";
 import { MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatWindow } from "@/components/chat/chat-window";
@@ -14,7 +15,9 @@ export function ChatBubble() {
 
   return (
     <>
-      <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <AnimatePresence>
+        {isOpen && <ChatWindow isOpen={isOpen} onClose={() => setIsOpen(false)} />}
+      </AnimatePresence>
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
         size="icon"
