@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 import { X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatMessage, chatApiResponseToProps } from "@/components/chat/chat-message";
@@ -114,7 +115,13 @@ export function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
   }
 
   return (
-    <div className={`fixed bottom-20 right-6 z-50 flex max-h-[50vh] w-[380px] flex-col rounded-lg border border-border bg-card shadow-xl max-sm:bottom-0 max-sm:right-0 max-sm:max-h-full max-sm:h-full max-sm:w-full max-sm:rounded-none transition-all duration-200 ease-out ${isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95 pointer-events-none"}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 20, scale: 0.95 }}
+      transition={{ type: "spring", damping: 25, stiffness: 350 }}
+      className="fixed bottom-24 right-6 z-50 flex max-h-[600px] w-[440px] flex-col rounded-lg border border-border bg-card shadow-xl max-sm:bottom-0 max-sm:right-0 max-sm:max-h-full max-sm:h-full max-sm:w-full max-sm:rounded-none"
+    >
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <h3 className="text-sm font-semibold">Meal Plan Assistant</h3>
         <Button variant="ghost" size="icon" onClick={onClose} className="size-7">
@@ -146,6 +153,6 @@ export function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       </div>
 
       <ChatInput onSend={handleSend} isLoading={isLoading} />
-    </div>
+    </motion.div>
   );
 }
