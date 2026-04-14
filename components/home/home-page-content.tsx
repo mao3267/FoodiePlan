@@ -54,28 +54,40 @@ export function HomePageContent() {
 
   if (status === "loading" || isLoading) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-2xl mx-auto px-4 pt-10 pb-28">
         <div className="animate-pulse space-y-6">
-          <div className="h-48 bg-muted rounded-lg" />
-          <div className="h-64 bg-muted rounded-lg" />
-          <div className="h-64 bg-muted rounded-lg" />
+          <div className="h-48 bg-muted rounded-3xl" />
+          <div className="h-64 bg-muted rounded-3xl" />
+          <div className="h-64 bg-muted rounded-3xl" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 pt-10 pb-28">
+      <header className="mb-10">
+        <span className="block text-xs font-headline font-bold tracking-widest uppercase text-[var(--color-secondary-strong)] mb-2">
+          The Feed
+        </span>
+        <h1 className="text-5xl font-headline font-extrabold tracking-tight text-foreground mb-3">
+          What&apos;s <span className="italic text-primary">cooking</span>.
+        </h1>
+        <p className="text-muted-foreground font-medium leading-relaxed">
+          Share a plate, a tip, a triumph — your kitchen journal.
+        </p>
+      </header>
+
       <PostForm onPostCreated={handlePostCreated} />
 
       <div className="space-y-6">
         {fetchError && (
-          <p className="text-center text-destructive py-4">
+          <p className="text-center text-destructive py-4 font-medium">
             Failed to load posts. Please refresh the page.
           </p>
         )}
         {posts.length === 0 && !fetchError ? (
-          <p className="text-center text-muted-foreground py-12">
+          <p className="text-center text-muted-foreground py-12 font-medium">
             No posts yet. Share what you&apos;re cooking!
           </p>
         ) : (

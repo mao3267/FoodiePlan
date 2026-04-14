@@ -72,38 +72,40 @@ export function PostForm({ onPostCreated }: PostFormProps) {
   };
 
   return (
-    <Card className="p-4 mb-6">
-      <div className="flex items-center gap-3 mb-3">
+    <Card className="p-6 mb-8">
+      <div className="flex items-center gap-3 mb-4">
         {session?.user?.image && (
           <ImageWithFallback
             src={session.user.image}
             alt={session.user.name ?? "User"}
-            className="size-10 rounded-full object-cover"
+            className="size-11 rounded-full object-cover ring-2 ring-border"
           />
         )}
-        <span className="font-semibold">{session?.user?.name ?? "User"}</span>
+        <span className="font-headline font-bold text-card-foreground">
+          {session?.user?.name ?? "User"}
+        </span>
       </div>
 
       <Textarea
         placeholder="What's cooking?"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="mb-3 min-h-[100px]"
+        className="mb-4 min-h-[110px] rounded-2xl bg-muted border-none resize-none focus-visible:ring-2 focus-visible:ring-primary/30"
         maxLength={2000}
       />
 
       {image && (
-        <div className="relative mb-3 inline-block">
+        <div className="relative mb-4 inline-block">
           <ImageWithFallback
             src={image}
             alt="Upload preview"
-            className="max-h-48 rounded-lg object-cover"
+            className="max-h-52 rounded-2xl object-cover"
           />
           <button
             type="button"
             onClick={() => setImage("")}
             aria-label="Remove image"
-            className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
+            className="absolute top-2 right-2 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/80"
           >
             <X className="size-4" />
           </button>
@@ -111,7 +113,7 @@ export function PostForm({ onPostCreated }: PostFormProps) {
       )}
 
       {error && (
-        <p className="text-sm text-destructive mb-3">{error}</p>
+        <p className="text-sm text-destructive mb-3 font-medium">{error}</p>
       )}
 
       <div className="flex justify-between items-center">
@@ -127,15 +129,16 @@ export function PostForm({ onPostCreated }: PostFormProps) {
           size="sm"
           type="button"
           onClick={() => fileInputRef.current?.click()}
+          className="rounded-full text-muted-foreground hover:text-primary font-headline font-semibold"
         >
-          <ImagePlus className="size-5 mr-1" />
+          <ImagePlus className="size-5 mr-1.5" />
           Photo
         </Button>
 
         <Button
           onClick={handleSubmit}
           disabled={!content.trim() || isSubmitting}
-          className="bg-green-600 hover:bg-green-700"
+          className="signature-gradient text-white font-headline font-bold rounded-full px-7 py-5 hover:opacity-90 active:scale-95 transition-transform"
         >
           <Send className="size-4 mr-2" />
           {isSubmitting ? "Posting..." : "Post"}

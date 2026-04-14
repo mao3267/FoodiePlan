@@ -58,18 +58,18 @@ export function ProfileSection({
   }
 
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Profile</h2>
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-6">Profile</h2>
 
       <div className="flex items-center gap-6 mb-6">
         <ImageWithFallback
           src={image}
           alt="Profile"
-          className="size-24 rounded-full object-cover"
+          className="size-24 rounded-full object-cover ring-2 ring-border"
         />
         <div className="flex-1">
-          <h3 className="font-semibold mb-1">Profile Picture</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-headline font-bold mb-1 text-card-foreground">Profile Picture</h3>
+          <p className="text-sm text-muted-foreground font-medium">
             Managed by your Google account
           </p>
         </div>
@@ -77,38 +77,44 @@ export function ProfileSection({
 
       <Separator className="my-6" />
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <Label htmlFor="name">Full Name</Label>
+          <Label htmlFor="name" className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground">
+            Full Name
+          </Label>
           <Input
             id="name"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
-            className="mt-1"
+            className="mt-2"
           />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground">
+            Email
+          </Label>
           <Input
             id="email"
             type="email"
             value={email}
             disabled
-            className="mt-1"
+            className="mt-2"
           />
         </div>
         <div>
-          <Label htmlFor="bio">Bio</Label>
+          <Label htmlFor="bio" className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground">
+            Bio
+          </Label>
           <Textarea
             id="bio"
             value={editedBio}
             onChange={(e) => setEditedBio(e.target.value)}
-            className="mt-1"
+            className="mt-2 rounded-2xl bg-muted border-none resize-none focus-visible:ring-2 focus-visible:ring-primary/30"
             rows={4}
             maxLength={500}
             placeholder="Tell us a little about yourself..."
           />
-          <p className="text-xs text-muted-foreground mt-1 text-right">
+          <p className="text-xs text-muted-foreground mt-1 text-right font-medium">
             {editedBio.length}/500
           </p>
         </div>
@@ -116,6 +122,7 @@ export function ProfileSection({
           <Button
             onClick={handleSaveProfile}
             disabled={!hasChanges || saving}
+            className="signature-gradient text-white font-headline font-bold rounded-full px-7 py-5 hover:opacity-90 active:scale-95 transition-transform"
           >
             {saving ? "Saving..." : "Save Changes"}
           </Button>

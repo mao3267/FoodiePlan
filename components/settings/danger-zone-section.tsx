@@ -16,18 +16,20 @@ import {
 
 export function DangerZoneSection() {
   return (
-    <Card className="p-6 border-red-200">
-      <h2 className="text-xl font-semibold text-red-600 mb-4">Danger Zone</h2>
-      <p className="text-muted-foreground mb-4">
+    <Card className="p-8 border-destructive/30">
+      <h2 className="font-headline font-bold text-xl tracking-tight text-destructive mb-3">Danger Zone</h2>
+      <p className="text-sm text-muted-foreground font-medium mb-5 leading-relaxed">
         Once you delete your account, there is no going back. Please be certain.
       </p>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="destructive">Delete Account</Button>
+          <Button variant="destructive" className="rounded-full font-headline font-bold px-6 py-5">
+            Delete Account
+          </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle className="font-headline font-bold">Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove all of your data including meal plans, recipes,
@@ -35,9 +37,9 @@ export function DangerZoneSection() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-full font-headline font-bold">Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full font-headline font-bold"
               onClick={() => {
                 // TODO: implement account deletion
               }}

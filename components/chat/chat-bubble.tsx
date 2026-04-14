@@ -21,7 +21,7 @@ export function ChatBubble() {
       <Button
         onClick={() => setIsOpen((prev) => !prev)}
         size="icon"
-        className="fixed bottom-6 right-6 z-50 size-14 rounded-full shadow-lg transition-transform duration-200 ease-out hover:scale-105"
+        className="signature-gradient fixed bottom-6 right-6 z-50 size-14 rounded-full shadow-xl transition-transform duration-200 ease-out hover:scale-105 hover:opacity-90"
       >
         <MessageCircle
           className={`size-6 absolute transition-all duration-200 ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100"}`}

@@ -66,16 +66,16 @@ export function NotificationsSection({
   }
 
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Notifications</h2>
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-6">Notifications</h2>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Mail className="size-5 text-muted-foreground" />
+            <Mail className="size-5 text-primary" />
             <div>
-              <p className="font-medium">Email Notifications</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="font-headline font-bold text-card-foreground">Email Notifications</p>
+              <p className="text-xs font-medium text-muted-foreground mt-0.5">
                 Receive updates about your meal plans
               </p>
             </div>
@@ -90,10 +90,10 @@ export function NotificationsSection({
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Bell className="size-5 text-muted-foreground" />
+            <Bell className="size-5 text-primary" />
             <div>
-              <p className="font-medium">Push Notifications</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="font-headline font-bold text-card-foreground">Push Notifications</p>
+              <p className="text-xs font-medium text-muted-foreground mt-0.5">
                 Get notified about meal reminders
               </p>
             </div>
@@ -107,7 +107,7 @@ export function NotificationsSection({
         <Separator />
 
         <div>
-          <p className="font-medium mb-3">Default Meal Times</p>
+          <p className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground mb-3">Default Meal Times</p>
           <div className="space-y-3">
             {(Object.keys(MEAL_TIME_LABELS) as Array<keyof IDefaultMealTimes>).map(
               (meal) => (

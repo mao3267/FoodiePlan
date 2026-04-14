@@ -7,12 +7,12 @@ import { LogOut } from "lucide-react";
 
 export function AuthenticationSection() {
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Authentication</h2>
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-6">Authentication</h2>
 
-      <div className="flex items-center justify-between p-4 border rounded-lg">
+      <div className="flex items-center justify-between p-5 rounded-2xl bg-muted">
         <div className="flex items-center gap-3">
-          <div className="bg-blue-100 p-2 rounded-lg">
+          <div className="bg-white p-2.5 rounded-xl ring-1 ring-border">
             <svg className="size-6" viewBox="0 0 24 24">
               <path
                 fill="#4285F4"
@@ -33,14 +33,15 @@ export function AuthenticationSection() {
             </svg>
           </div>
           <div>
-            <p className="font-medium">Google Account</p>
-            <p className="text-sm text-muted-foreground">Connected</p>
+            <p className="font-headline font-bold text-card-foreground">Google Account</p>
+            <p className="text-xs font-medium text-muted-foreground">Connected</p>
           </div>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => signOut({ callbackUrl: "/" })}
+          className="rounded-full font-headline font-bold"
         >
           <LogOut className="size-4 mr-2" />
           Log Out

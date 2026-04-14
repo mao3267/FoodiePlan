@@ -4,17 +4,8 @@ import { auth } from "@/lib/auth/auth";
 import { connectDB } from "@/lib/db/connection";
 import { MealPlan } from "@/lib/db/models/meal-plan";
 import { getWeekDays } from "@/lib/utils/week-dates";
-import { normalizeIngredients } from "@/lib/utils/normalize-ingredient";
-
-const VALID_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-] as const;
+import { normalizePlanResponse } from "@/lib/utils/plan-response";
+import { VALID_DAYS } from "@/lib/constants/days";
 
 function parseLocalDate(dateStr: string): Date {
   const [y, m, d] = dateStr.split("-").map(Number);
@@ -40,17 +31,6 @@ const postBodySchema = z.object({
   day: z.enum(VALID_DAYS),
   meal: mealBodySchema,
 });
-
-function normalizePlanResponse(plan: unknown): unknown {
-  const serialized = JSON.parse(JSON.stringify(plan));
-  for (const day of serialized.days ?? []) {
-    for (const meal of day.meals ?? []) {
-      meal.ingredients = normalizeIngredients(meal.ingredients ?? []);
-      meal.seasonings = normalizeIngredients(meal.seasonings ?? []);
-    }
-  }
-  return serialized;
-}
 
 export async function GET(request: NextRequest) {
   const session = await auth();

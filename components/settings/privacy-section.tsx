@@ -14,15 +14,15 @@ export function PrivacySection({
   onPublicProfileChange,
 }: PrivacySectionProps) {
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Privacy</h2>
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-6">Privacy</h2>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Globe className="size-5 text-muted-foreground" />
+          <Globe className="size-5 text-primary" />
           <div>
-            <p className="font-medium">Public Profile</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="font-headline font-bold text-card-foreground">Public Profile</p>
+            <p className="text-xs font-medium text-muted-foreground mt-0.5">
               Allow others to see your profile and posts
             </p>
           </div>

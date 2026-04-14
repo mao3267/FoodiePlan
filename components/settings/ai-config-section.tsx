@@ -89,36 +89,38 @@ export function AIConfigSection({
   }
 
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-2">AI Configuration</h2>
-      <p className="text-sm text-muted-foreground mb-6">
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-2">AI Configuration</h2>
+      <p className="text-sm text-muted-foreground font-medium mb-6 leading-relaxed">
         Add your own Gemini API key for AI-powered recipe suggestions and meal
         plan generation. Your key is encrypted at rest.
       </p>
 
       {error && (
-        <p role="alert" className="text-sm text-red-600 mb-4">{error}</p>
+        <p role="alert" className="text-sm text-destructive mb-4 font-medium">{error}</p>
       )}
 
       {showInput ? (
         <div className="space-y-4">
           <div>
-            <Label htmlFor="gemini-api-key">Gemini API Key</Label>
+            <Label htmlFor="gemini-api-key" className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground">
+              Gemini API Key
+            </Label>
             <Input
               id="gemini-api-key"
               type="password"
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               placeholder="AIza..."
-              className="mt-1"
+              className="mt-2"
             />
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-2 font-medium">
               Get a key from{" "}
               <a
                 href="https://aistudio.google.com/apikey"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline hover:text-foreground"
+                className="text-primary font-bold hover:underline"
               >
                 Google AI Studio
               </a>
@@ -128,6 +130,7 @@ export function AIConfigSection({
             <Button
               onClick={handleSave}
               disabled={!apiKey.trim() || saving}
+              className="signature-gradient text-white font-headline font-bold rounded-full px-6 py-5 hover:opacity-90"
             >
               {saving ? "Saving..." : "Save Key"}
             </Button>
@@ -139,6 +142,7 @@ export function AIConfigSection({
                   setApiKey("");
                   setError(null);
                 }}
+                className="rounded-full font-headline font-bold"
               >
                 Cancel
               </Button>
@@ -148,33 +152,35 @@ export function AIConfigSection({
       ) : (
         <div className="space-y-4">
           <div>
-            <Label>Current API Key</Label>
-            <p className="mt-1 font-mono text-sm text-muted-foreground">
+            <Label className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground">
+              Current API Key
+            </Label>
+            <p className="mt-2 font-mono text-sm text-card-foreground bg-muted rounded-xl px-4 py-2.5 inline-block">
               {maskedGeminiKey}
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => setEditing(true)}>
+            <Button variant="outline" onClick={() => setEditing(true)} className="rounded-full font-headline font-bold">
               Update Key
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={removing}>
+                <Button variant="destructive" disabled={removing} className="rounded-full font-headline font-bold">
                   {removing ? "Removing..." : "Remove Key"}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Remove API key?</AlertDialogTitle>
+                  <AlertDialogTitle className="font-headline font-bold">Remove API key?</AlertDialogTitle>
                   <AlertDialogDescription>
                     This will delete your stored Gemini API key. AI features will
                     be unavailable until you add a new key.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel className="rounded-full font-headline font-bold">Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    className="bg-red-600 hover:bg-red-700"
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full font-headline font-bold"
                     onClick={handleRemove}
                   >
                     Remove Key
