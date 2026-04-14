@@ -3,17 +3,8 @@ import { z } from "zod";
 import { auth } from "@/lib/auth/auth";
 import { connectDB } from "@/lib/db/connection";
 import { MealPlan } from "@/lib/db/models/meal-plan";
-import { normalizeIngredients } from "@/lib/utils/normalize-ingredient";
-
-const VALID_DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-] as const;
+import { normalizePlanResponse } from "@/lib/utils/plan-response";
+import { VALID_DAYS } from "@/lib/constants/days";
 
 const ingredientSchema = z.object({
   name: z.string().trim().min(1).max(200),
@@ -36,16 +27,6 @@ const deleteBodySchema = z.object({
   day: z.enum(VALID_DAYS),
   mealId: z.string().min(1),
 });
-
-function normalizePlanResponse(plan: unknown): unknown {
-  const serialized = JSON.parse(JSON.stringify(plan));
-  for (const day of serialized.days ?? []) {
-    for (const meal of day.meals ?? []) {
-      meal.ingredients = normalizeIngredients(meal.ingredients ?? []);
-    }
-  }
-  return serialized;
-}
 
 export async function GET(
   _request: Request,

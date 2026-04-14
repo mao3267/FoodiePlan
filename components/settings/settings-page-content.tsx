@@ -21,7 +21,7 @@ function SettingsSkeleton() {
   return (
     <div className="space-y-6">
       {Array.from({ length: 5 }).map((_, i) => (
-        <Card key={i} className="p-6">
+        <Card key={i} className="p-8">
           <Skeleton className="h-6 w-32 mb-4" />
           <Skeleton className="h-10 w-full mb-2" />
           <Skeleton className="h-10 w-full" />
@@ -82,8 +82,15 @@ export function SettingsPageContent() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl mb-8">Settings</h1>
+      <div className="max-w-4xl mx-auto px-6 pt-10 pb-16">
+        <header className="mb-10">
+          <span className="block text-xs font-headline font-bold tracking-widest uppercase text-[var(--color-secondary-strong)] mb-2">
+            Account Preferences
+          </span>
+          <h1 className="text-5xl font-headline font-extrabold tracking-tight text-foreground mb-3">
+            Your <span className="italic text-primary">settings</span>.
+          </h1>
+        </header>
         <SettingsSkeleton />
       </div>
     );
@@ -94,8 +101,18 @@ export function SettingsPageContent() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl mb-8">Settings</h1>
+    <div className="max-w-4xl mx-auto px-6 pt-10 pb-16">
+      <header className="mb-10">
+        <span className="block text-xs font-headline font-bold tracking-widest uppercase text-[var(--color-secondary-strong)] mb-2">
+          Account Preferences
+        </span>
+        <h1 className="text-5xl font-headline font-extrabold tracking-tight text-foreground mb-3">
+          Your <span className="italic text-primary">settings</span>.
+        </h1>
+        <p className="text-muted-foreground font-medium leading-relaxed max-w-md">
+          Tune how FoodiePlan cooks, nudges, and remembers you.
+        </p>
+      </header>
 
       <div className="space-y-6">
         <ProfileSection

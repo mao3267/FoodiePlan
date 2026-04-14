@@ -122,23 +122,32 @@ export function CartPageContent() {
   const hasItems = items.length > 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl mb-2">Shopping Cart</h1>
-          {totalCount > 0 && (
-            <p className="text-muted-foreground">
-              {checkedCount} of {totalCount} items checked
+    <div className="max-w-4xl mx-auto px-6 pt-10 pb-16">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+        <div className="max-w-2xl">
+          <h1 className="text-5xl font-headline font-extrabold tracking-tight text-foreground mb-3">
+            Shopping <span className="italic text-primary">Cart</span>
+          </h1>
+          {totalCount > 0 ? (
+            <p className="text-muted-foreground font-medium leading-relaxed">
+              {checkedCount} of {totalCount} items checked.
+            </p>
+          ) : (
+            <p className="text-muted-foreground font-medium leading-relaxed">
+              Plan a meal or add groceries to fill up your list.
             </p>
           )}
         </div>
-        <Button onClick={handleAddClick}>
+        <Button
+          onClick={handleAddClick}
+          className="signature-gradient text-white font-headline font-bold rounded-full px-6 py-5 self-start md:self-end hover:opacity-90 active:scale-95 transition-transform"
+        >
           <Plus className="size-4 mr-2" />
           Add Grocery
         </Button>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-8">
         <WeekSelector value={weekFilter} onChange={setWeekFilter} />
       </div>
 
@@ -148,18 +157,20 @@ export function CartPageContent() {
             {Array.from({ length: 5 }).map((_, i) => (
               <div
                 key={i}
-                className="h-12 bg-muted animate-pulse rounded-lg"
+                className="h-12 bg-muted animate-pulse rounded-2xl"
               />
             ))}
           </div>
         </Card>
       ) : hasItems ? (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {foodItems.length > 0 && (
-            <div>
-              <h2 className="text-lg font-semibold mb-3">Food</h2>
+            <section>
+              <h2 className="text-2xl font-headline font-bold tracking-tight mb-4 ml-2">
+                Food
+              </h2>
               <Card className="p-4">
-                <div className="divide-y divide-border">
+                <div className="divide-y divide-border/60">
                   {foodItems.map((item) => (
                     <CartItemRow
                       key={item._id}
@@ -171,13 +182,15 @@ export function CartPageContent() {
                   ))}
                 </div>
               </Card>
-            </div>
+            </section>
           )}
           {seasoningItems.length > 0 && (
-            <div>
-              <h2 className="text-lg font-semibold mb-3">Seasonings</h2>
+            <section>
+              <h2 className="text-2xl font-headline font-bold tracking-tight mb-4 ml-2">
+                Seasonings
+              </h2>
               <Card className="p-4">
-                <div className="divide-y divide-border">
+                <div className="divide-y divide-border/60">
                   {seasoningItems.map((item) => (
                     <CartItemRow
                       key={item._id}
@@ -190,17 +203,24 @@ export function CartPageContent() {
                   ))}
                 </div>
               </Card>
-            </div>
+            </section>
           )}
         </div>
       ) : (
-        <Card className="p-12 text-center">
-          <ShoppingCart className="size-16 mx-auto mb-4 text-muted-foreground/30" />
-          <h2 className="text-xl mb-2">Your cart is empty</h2>
-          <p className="text-muted-foreground">
-            Add meals to your plan or add groceries manually
+        <section className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="relative w-full max-w-md mb-10">
+            <div className="absolute inset-0 bg-secondary/40 rounded-[3rem] rotate-3 scale-110 -z-10"></div>
+            <div className="aspect-square max-h-72 bg-card rounded-[2.5rem] editorial-shadow flex items-center justify-center p-8">
+              <ShoppingCart className="size-24 text-primary/40" />
+            </div>
+          </div>
+          <h2 className="font-headline text-4xl font-extrabold tracking-tight text-foreground mb-4">
+            Your basket is <span className="italic text-primary">freshly</span> empty
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-md mx-auto leading-relaxed">
+            Add meals to your plan or add groceries manually to start stocking your list.
           </p>
-        </Card>
+        </section>
       )}
 
       <AddGroceryDialog

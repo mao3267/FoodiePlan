@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 import { X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatMessage, chatApiResponseToProps } from "@/components/chat/chat-message";
@@ -114,10 +115,16 @@ export function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
   }
 
   return (
-    <div className={`fixed bottom-20 right-6 z-50 flex max-h-[50vh] w-[380px] flex-col rounded-lg border border-border bg-card shadow-xl max-sm:bottom-0 max-sm:right-0 max-sm:max-h-full max-sm:h-full max-sm:w-full max-sm:rounded-none transition-all duration-200 ease-out ${isOpen ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95 pointer-events-none"}`}>
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
-        <h3 className="text-sm font-semibold">Meal Plan Assistant</h3>
-        <Button variant="ghost" size="icon" onClick={onClose} className="size-7">
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 20, scale: 0.95 }}
+      transition={{ type: "spring", damping: 25, stiffness: 350 }}
+      className="fixed bottom-24 right-6 z-50 flex max-h-[600px] w-[440px] flex-col overflow-hidden rounded-3xl border border-border bg-card editorial-shadow shadow-xl max-sm:bottom-0 max-sm:right-0 max-sm:max-h-full max-sm:h-full max-sm:w-full max-sm:rounded-none"
+    >
+      <div className="flex items-center justify-between border-b border-border/60 px-5 py-4 signature-gradient">
+        <h3 className="text-sm font-headline font-bold tracking-tight">Meal Plan Assistant</h3>
+        <Button variant="ghost" size="icon" onClick={onClose} className="size-7 text-white hover:bg-white/20 hover:text-white rounded-full">
           <X className="size-4" />
           <span className="sr-only">Close chat</span>
         </Button>
@@ -137,7 +144,7 @@ export function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 rounded-2xl bg-muted px-4 py-2.5 text-sm text-muted-foreground font-medium">
               <Loader2 className="size-4 animate-spin" />
               Thinking...
             </div>
@@ -146,6 +153,6 @@ export function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       </div>
 
       <ChatInput onSend={handleSend} isLoading={isLoading} />
-    </div>
+    </motion.div>
   );
 }

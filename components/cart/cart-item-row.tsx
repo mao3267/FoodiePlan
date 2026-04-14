@@ -32,13 +32,14 @@ export function CartItemRow({
     : formatQuantity(item.quantity, item.unit);
 
   return (
-    <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
+    <div className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40">
       <Checkbox
         checked={item.checked}
         onCheckedChange={(checked) =>
           onToggleChecked(item._id, checked === true)
         }
         id={`item-${item._id}`}
+        className="size-5 rounded-md"
       />
       <label
         htmlFor={`item-${item._id}`}
@@ -46,15 +47,19 @@ export function CartItemRow({
           item.checked ? "line-through text-muted-foreground" : ""
         }`}
       >
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span>{item.name}</span>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-headline font-semibold text-card-foreground truncate">
+              {item.name}
+            </span>
             {item.source === "plan" && (
-              <span className="text-xs text-muted-foreground">(from plan)</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">
+                from plan
+              </span>
             )}
           </div>
           {quantityDisplay && (
-            <span className="text-sm text-muted-foreground shrink-0">
+            <span className="text-xs font-medium text-muted-foreground shrink-0">
               {quantityDisplay}
             </span>
           )}
@@ -65,7 +70,7 @@ export function CartItemRow({
           <Button
             variant="ghost"
             size="icon"
-            className="size-7"
+            className="size-8 rounded-full"
             onClick={() => onEdit(item)}
           >
             <Pencil className="size-3.5" />
@@ -73,7 +78,7 @@ export function CartItemRow({
           <Button
             variant="ghost"
             size="icon"
-            className="size-7 text-destructive hover:text-destructive"
+            className="size-8 rounded-full text-destructive hover:text-destructive"
             onClick={() => onDelete(item._id)}
           >
             <Trash2 className="size-3.5" />

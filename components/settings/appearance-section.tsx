@@ -10,12 +10,12 @@ export function AppearanceSection() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-6">Appearance</h2>
+    <Card className="p-8">
+      <h2 className="font-headline font-bold text-xl tracking-tight mb-6">Appearance</h2>
       <div className="flex items-start gap-3">
-        <Palette className="size-5 text-muted-foreground mt-0.5" />
+        <Palette className="size-5 text-primary mt-0.5" />
         <div className="flex-1">
-          <p className="font-medium mb-3">Theme</p>
+          <p className="text-xs font-headline font-bold tracking-widest uppercase text-muted-foreground mb-3">Theme</p>
           <RadioGroup
             value={theme ?? "dark"}
             onValueChange={setTheme}

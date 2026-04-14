@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Clock, Users, Pencil, Trash2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Users, Pencil, Trash2, GripVertical } from "lucide-react";
+import { useDraggable } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
 import { formatIngredient } from "@/lib/utils/format-ingredient";
 import type { ClientMeal } from "@/lib/types";
@@ -27,6 +27,22 @@ export function MealCard({
 }: MealCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    isDragging,
+  } = useDraggable({
+    id: `meal-${meal._id}`,
+    data: { mealId: meal._id, fromDay: day },
+  });
+
+  const dragStyle = transform
+    ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
+    : undefined;
 
   const ingredients = meal.ingredients;
   const seasonings = meal.seasonings ?? [];
@@ -63,14 +79,34 @@ export function MealCard({
   }
 
   return (
-    <div className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow bg-card">
-      <div className="flex items-start justify-between mb-2">
-        <h3 className="font-semibold text-card-foreground">{meal.name}</h3>
-        <div className="flex gap-1">
+    <div
+      ref={setNodeRef}
+      style={dragStyle}
+      className={`group rounded-3xl p-5 bg-card editorial-shadow hover:shadow-md transition-shadow ${
+        isDragging ? "opacity-50" : ""
+      }`}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <button
+            type="button"
+            ref={setActivatorNodeRef}
+            {...listeners}
+            {...attributes}
+            className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground hover:text-primary shrink-0"
+            aria-label="Drag to move meal"
+          >
+            <GripVertical className="size-4" />
+          </button>
+          <h3 className="font-headline font-bold text-lg leading-tight text-card-foreground truncate">
+            {meal.name}
+          </h3>
+        </div>
+        <div className="flex gap-1 shrink-0">
           <Button
             variant="ghost"
             size="icon"
-            className="size-7"
+            className="size-7 rounded-full"
             onClick={() => onEditClick(meal)}
           >
             <Pencil className="size-3.5" />
@@ -78,7 +114,7 @@ export function MealCard({
           <Button
             variant="ghost"
             size="icon"
-            className="size-7 text-destructive hover:text-destructive"
+            className="size-7 rounded-full text-destructive hover:text-destructive"
             onClick={handleDelete}
             disabled={deleting}
           >
@@ -87,14 +123,13 @@ export function MealCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
-        <Badge variant="secondary" className="gap-1">
-          <Clock className="size-3" />
+      <div className="flex items-center gap-3 mb-3">
+        <span className="inline-flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
           {meal.time}
-        </Badge>
-        <div className="flex items-center gap-1">
+        </span>
+        <div className="flex items-center gap-1 text-muted-foreground text-xs">
           <Users className="size-3.5" />
-          <span>{meal.servings}</span>
+          <span className="font-medium">{meal.servings}</span>
         </div>
       </div>
 

@@ -122,27 +122,27 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
   return (
     <>
       <Card className="overflow-hidden">
-        <div className="p-4">
-          <div className="flex items-center gap-3 mb-3">
+        <div className="p-6">
+          <div className="flex items-center gap-3 mb-4">
             {session?.user?.image && (
               <ImageWithFallback
                 src={session.user.image}
                 alt={session.user.name ?? "User"}
-                className="size-10 rounded-full object-cover"
+                className="size-11 rounded-full object-cover ring-2 ring-border"
               />
             )}
-            <div className="flex-1">
-              <div className="font-semibold">
+            <div className="flex-1 min-w-0">
+              <div className="font-headline font-bold text-card-foreground truncate">
                 {session?.user?.name ?? "User"}
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-xs font-medium text-muted-foreground/80">
                 {formatRelativeTime(post.createdAt)}
               </div>
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8" aria-label="Post options">
+                <Button variant="ghost" size="icon" className="size-9 rounded-full" aria-label="Post options">
                   <MoreHorizontal className="size-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -167,7 +167,7 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
               <Textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="mb-3 min-h-[80px]"
+                className="mb-3 min-h-[90px] rounded-2xl bg-muted border-none resize-none focus-visible:ring-2 focus-visible:ring-primary/30"
                 maxLength={2000}
               />
               {editImage && (
@@ -175,20 +175,20 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
                   <ImageWithFallback
                     src={editImage}
                     alt="Edit preview"
-                    className="max-h-48 rounded-lg object-cover"
+                    className="max-h-48 rounded-2xl object-cover"
                   />
                   <button
                     type="button"
                     onClick={() => setEditImage("")}
                     aria-label="Remove image"
-                    className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
+                    className="absolute top-2 right-2 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/80"
                   >
                     <X className="size-4" />
                   </button>
                 </div>
               )}
               {error && (
-                <p className="text-sm text-destructive mb-2">{error}</p>
+                <p className="text-sm text-destructive mb-2 font-medium">{error}</p>
               )}
               <div className="flex items-center gap-2">
                 <label className="cursor-pointer">
@@ -198,7 +198,7 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
                     onChange={handleImageChange}
                     className="hidden"
                   />
-                  <Button variant="ghost" size="sm" asChild>
+                  <Button variant="ghost" size="sm" asChild className="rounded-full text-muted-foreground hover:text-primary font-headline font-semibold">
                     <span>
                       <ImagePlus className="size-4 mr-1" />
                       Photo
@@ -206,20 +206,23 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
                   </Button>
                 </label>
                 <div className="flex-1" />
-                <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
+                <Button variant="ghost" size="sm" onClick={handleCancelEdit} className="rounded-full font-headline font-semibold">
                   Cancel
                 </Button>
                 <Button
                   size="sm"
                   onClick={handleSave}
                   disabled={!editContent.trim() || isSaving}
+                  className="signature-gradient text-white font-headline font-bold rounded-full px-6"
                 >
                   {isSaving ? "Saving..." : "Save"}
                 </Button>
               </div>
             </div>
           ) : (
-            <p className="whitespace-pre-wrap">{post.content}</p>
+            <p className="whitespace-pre-wrap text-card-foreground leading-relaxed">
+              {post.content}
+            </p>
           )}
         </div>
 
@@ -246,7 +249,7 @@ export function PostCard({ post, onPostUpdated, onPostDeleted }: PostCardProps) 
             <AlertDialogAction
               onClick={handleDelete}
               disabled={isDeleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full font-headline font-bold"
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>

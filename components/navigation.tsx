@@ -23,12 +23,14 @@ export function Navigation() {
   }
 
   return (
-    <nav className="border-b border-border bg-card">
+    <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <ShoppingCart className="size-8 text-primary" />
-            <span className="text-xl font-semibold">FoodiePlan</span>
+            <ShoppingCart className="size-7 text-primary" />
+            <span className="text-2xl font-headline font-extrabold tracking-tighter text-primary">
+              FoodiePlan
+            </span>
           </Link>
           <div className="flex items-center gap-1">
             {navItems.map((item) => {
@@ -41,16 +43,16 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`relative flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  className={`relative flex items-center gap-2 px-4 py-2 font-headline tracking-tight transition-colors ${
                     isActive
-                      ? "text-primary"
-                      : "text-muted-foreground hover:bg-accent"
+                      ? "text-primary font-bold"
+                      : "text-muted-foreground font-medium hover:text-primary"
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="nav-active-indicator"
-                      className="absolute inset-0 rounded-lg bg-primary/10"
+                      className="absolute left-4 right-4 bottom-0 h-[2px] rounded-full bg-primary"
                       transition={{
                         type: "spring",
                         stiffness: 500,

@@ -38,21 +38,21 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
   }
 
   return (
-    <div className="flex items-end gap-2 border-t border-border p-3">
+    <div className="flex items-end gap-2 border-t border-border/60 p-3">
       <Textarea
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Ask about meal planning..."
-        className="min-h-10 max-h-24 resize-none text-sm"
+        className="min-h-10 max-h-24 resize-none text-sm rounded-2xl bg-muted border-none focus-visible:ring-2 focus-visible:ring-primary/30"
         rows={1}
       />
       <Button
         size="icon"
         onClick={handleSubmit}
         disabled={!input.trim() || isLoading}
-        className="shrink-0"
+        className="signature-gradient shrink-0 rounded-full hover:opacity-90"
       >
         <Send className="size-4" />
         <span className="sr-only">Send message</span>
