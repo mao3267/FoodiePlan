@@ -3,20 +3,11 @@
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Bell, Mail } from "lucide-react";
 import { MealTimePicker } from "@/components/settings/meal-time-picker";
 import type {
   INotificationPreferences,
   IDefaultMealTimes,
-  ReminderOffset,
-  MealTime,
 } from "@/lib/types";
 
 interface NotificationsSectionProps {
@@ -32,12 +23,6 @@ const MEAL_TIME_LABELS: Record<keyof IDefaultMealTimes, string> = {
   Dinner: "Dinner",
 };
 
-const REMINDER_OPTIONS: { value: ReminderOffset; label: string }[] = [
-  { value: 10, label: "10 minutes before" },
-  { value: 30, label: "30 minutes before" },
-  { value: 60, label: "1 hour before" },
-];
-
 export function NotificationsSection({
   notifications,
   defaultMealTimes,
@@ -48,13 +33,6 @@ export function NotificationsSection({
     onNotificationsChange({
       ...notifications,
       [field]: !notifications[field],
-    });
-  }
-
-  function handleReminderChange(value: string) {
-    onNotificationsChange({
-      ...notifications,
-      reminderOffset: Number(value) as ReminderOffset,
     });
   }
 
